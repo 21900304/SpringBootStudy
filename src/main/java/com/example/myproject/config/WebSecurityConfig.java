@@ -23,11 +23,11 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers("/","/css/**","/account/register").permitAll()
+                        .anyRequest().authenticated() //위 url를 제외한 모든 페이지는 auth 인증이 필요하다
                 )
                 .formLogin((form) -> form
-                        .loginPage("/login")
+                        .loginPage("/account/login")
                         .permitAll()
                 )
                 .logout((logout) -> logout.permitAll());
@@ -36,18 +36,18 @@ public class WebSecurityConfig {
     }
 
     @Autowired
-    public void configureGlobal(AuthenticationManagerBuilder auth)
+    public void configureGlobal(AuthenticationManagerBuilder auth, @Lazy PasswordEncoder passwordEncoder)
             throws Exception {
         auth.jdbcAuthentication()
                 .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery("select email,password,enabled " //인증 처리
+                .passwordEncoder(passwordEncoder)
+                .usersByUsernameQuery("select username, password, enabled " //인증 처리
                         + "from user "
                         + "where username = ?")
-                .authoritiesByUsernameQuery("select username,name " //권한 처리
+                .authoritiesByUsernameQuery("select u.username, r.name " //권한 처리
                         + "from user_role ur inner join user u on ur.user_id = u.id "
                         + "inner join role r on ur.role_id = r.id "
-                        + "where email = ?");
+                        + "where u.username = ?");
     }
 
     @Bean
