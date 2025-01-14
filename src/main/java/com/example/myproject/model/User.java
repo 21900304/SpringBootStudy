@@ -1,5 +1,6 @@
 package com.example.myproject.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -24,4 +25,6 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user")
+    private List<Board> boards = new ArrayList<>();
 }

@@ -1,9 +1,6 @@
 package com.example.myproject.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -20,4 +17,8 @@ public class Board {
     @Size(min = 2, max = 50)
     private String title;
     private String content;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
