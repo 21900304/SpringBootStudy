@@ -22,6 +22,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+                .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/","/css/**","/account/register","/api/**").permitAll()
                         .anyRequest().authenticated() //위 url를 제외한 모든 페이지는 auth 인증이 필요하다
