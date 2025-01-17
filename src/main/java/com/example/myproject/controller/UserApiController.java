@@ -6,6 +6,7 @@ import com.example.myproject.repository.BoardRepository;
 import com.example.myproject.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
@@ -63,6 +64,7 @@ class UserApiController {
                 });
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping("/users/{id}")
     void deleteUser(@PathVariable Long id) {
         repository.deleteById(id);
