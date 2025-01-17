@@ -18,6 +18,7 @@ public class User {
     private String password;
     private Boolean enabled;
 
+    @JsonIgnore //권한이 보이지 않게
     @ManyToMany
     @JoinTable(
             name = "user_role",
@@ -25,6 +26,8 @@ public class User {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //사용할 때만 조회.
+    //One으로 끝나는 것은 EAGER가 기본값, Many로 끝나는 것은 LAZY
     private List<Board> boards = new ArrayList<>();
 }

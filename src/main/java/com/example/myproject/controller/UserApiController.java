@@ -4,6 +4,7 @@ import com.example.myproject.model.Board;
 import com.example.myproject.model.User;
 import com.example.myproject.repository.BoardRepository;
 import com.example.myproject.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
@@ -12,6 +13,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@Slf4j
 class UserApiController {
 
     @Autowired
@@ -19,8 +21,14 @@ class UserApiController {
 
     @GetMapping("/users")
     List<User> all() {
-        return repository.findAll();
-    }
+        List<User> users = repository.findAll();
+        log.debug("getBoards().size(); 호출 전");
+        log.debug("getBoards().size(); {}",users.get(0).getBoards().size());
+        log.debug("getBoards().size(); 호출 후");
+
+
+        return users;
+    } //모든 user를 불러오면 성능 상 문제가 생긴다.
 
     @PostMapping("/users")
     User newUser(@RequestBody User newUser) {
