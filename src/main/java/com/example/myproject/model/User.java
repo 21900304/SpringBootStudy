@@ -29,5 +29,6 @@ public class User {
     //@OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY) //사용할 때만 조회.
     //One으로 끝나는 것은 EAGER가 기본값, Many로 끝나는 것은 LAZY
+    @JsonIgnore
     private List<Board> boards = new ArrayList<>();
 }

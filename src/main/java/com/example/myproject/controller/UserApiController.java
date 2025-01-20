@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.thymeleaf.util.StringUtils;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 @RestController
 @RequestMapping("/api")
@@ -21,11 +22,26 @@ class UserApiController {
     private UserRepository repository;
 
     @GetMapping("/users")
-    List<User> all() {
-        List<User> users = repository.findAll();
-        log.debug("getBoards().size(); 호출 전");
+    Iterable<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
+        Iterable<User> users = null;
+        /*log.debug("getBoards().size(); 호출 전");
         log.debug("getBoards().size(); {}",users.get(0).getBoards().size());
-        log.debug("getBoards().size(); 호출 후");
+        log.debug("getBoards().size(); 호출 후");*/
+        if("query".equals(method)) { //JPQL로 조회하는 경우
+            users = repository.findByUsernameQuery(text);
+        } else if("nativeQuery".equals(method)) { //nativeQuery로 조회하는 경우
+            users = repository.findByUsernameNativeQuery(text);
+        } /*else if("querydsl".equals(method)) {
+            QUser user = QUser.user;
+            Predicate predicate = user.username.contains(text);
+            users = repository.findAll(predicate); // queryDSL로 조회하는 경우.
+        }*/ /*else if("querydslCustom".equals(method)) {
+            users = repository.findByUsernameCustom(text);
+        }*/ else if("jdbc".equals(method)) {
+            users = repository.findByUsernameJdbc(text);
+        } else{
+            users = repository.findAll();
+        }
 
 
         return users;
