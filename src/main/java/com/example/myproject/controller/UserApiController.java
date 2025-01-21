@@ -1,5 +1,6 @@
 package com.example.myproject.controller;
 
+import com.example.myproject.mapper.UserMapper;
 import com.example.myproject.model.Board;
 import com.example.myproject.model.User;
 import com.example.myproject.repository.BoardRepository;
@@ -21,7 +22,12 @@ class UserApiController {
     @Autowired
     private UserRepository repository;
 
-    @GetMapping("/users")
+    @Autowired
+    private UserMapper userMapper;
+
+
+
+    @GetMapping("/users") //사용자 조회
     Iterable<User> all(@RequestParam(required = false) String method, @RequestParam(required = false) String text) {
         Iterable<User> users = null;
         /*log.debug("getBoards().size(); 호출 전");
@@ -39,6 +45,9 @@ class UserApiController {
             users = repository.findByUsernameCustom(text);
         }*/ else if("jdbc".equals(method)) {
             users = repository.findByUsernameJdbc(text);
+        } else if("mybatis".equals(method)) {
+            users = userMapper.getUsers(text); //http://localhost:8080/api/user?method=mybatis&text=hoon
+
         } else{
             users = repository.findAll();
         }

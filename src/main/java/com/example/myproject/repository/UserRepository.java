@@ -24,3 +24,4 @@ public interface UserRepository extends JpaRepository<User, Long>, CustomizedUse
 
 
 //custom query -> 복잡한 조건 데이터를 가져오기 위함
+//mybatis -> 실제 sql과 동일하게 때문에 사용하기 용이하다.
